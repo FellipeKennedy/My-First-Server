@@ -22,7 +22,8 @@ const userSchema = new mongoose.Schema({
         required: true,
         select: false,
         trim: true,
-        unique: false
+        unique: false,
+        default: "user"
     }
 })
 

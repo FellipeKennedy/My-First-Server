@@ -1,6 +1,6 @@
 import User from './model/User.js'
 import bcrypt from 'bcrypt'
-import jsonwebtoken from 'jsonwebtoken'
+import jwt from 'jsonwebtoken'
 import dotenv from 'dotenv'
 import mongoose from 'mongoose'
 import express from 'express'
@@ -17,7 +17,22 @@ const PORT = process.env.PORT
 const DB_URL = process.env.DB_URL
 mongoose.connect(DB_URL).then(()=> console.log("Database Conectado")).catch((err)=> console.log(err))
 
-
+function authToken(req, res, next){
+    const token = req.cookies.token
+    if(!token){ 
+        res.status(401).json({error: "Token nao encontrado"}) 
+        return;
+    }
+    
+    
+    const jwtAuth = jwt.verify(token, process.env.SECRETJWT)
+    
+    if(!jwtAuth.id){
+        res.status(401).json({error: "Usuário não identificado"})
+        return;
+    }
+    
+}
 
 server.post("/user/register", async(req, res)=>{
     const {email, password} = req.body
@@ -50,16 +65,15 @@ server.post("/user/register", async(req, res)=>{
             const password = await bcrypt.hash(pwd, 11)
             await User.create({email, password})
             
-            
-            const token = jsonwebtoken.sign({
+            const token = jwt.sign({
                 id: User._id,
                 role: "user"
             }, process.env.SECRETJWT)
             res.cookie("token", token, {
-                httpOnly: true
+                httpOnly: true,
                 expireIn: "1h"
             })
-            res.status(201).json({msg: "User created!"})
+            res.status(201).json({token: token, msg: "User created!"})
         } catch(err){
             res.status(500).json({error: "Error in create user"})
             console.log(err)
@@ -67,19 +81,8 @@ server.post("/user/register", async(req, res)=>{
     }
 })
 
-server.post("/auth/dashboard", async (req, res)=>{
-    const {token} = req.cookies
-    try{
-        const jwtAuthObj = jsonwebtoken.verify(req.cookies.token, process.env.SECRETJWT)
-        
-        
-    } catch (err) =>{
-        conaole.log("JWT errado bro")
-    }
+server.post("/auth/dashboard", authToken , async (req, res)=>{
     
-    
-    
-    console.log(req.cookies.token)
 })
 
 
