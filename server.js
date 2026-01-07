@@ -18,16 +18,19 @@ const DB_URL = process.env.DB_URL
 mongoose.connect(DB_URL).then(()=> console.log("Database Conectado")).catch((err)=> console.log(err))
 
 function authToken(req, res, next){
-    const token = req.cookies.token
+    const token = req.cookies.token 
+    console.log(token)
+    
+    
     if(!token){ 
         res.status(401).json({error: "Token nao encontrado"}) 
         return;
     }
     
     
-    const jwtAuth = jwt.verify(token, process.env.SECRETJWT)
+    const usertk = jwt.verify(token, process.env.SECRETJWT)
     
-    if(!jwtAuth.id){
+    if(!usertk.id){
         res.status(401).json({error: "Usuário não identificado"})
         return;
     }
@@ -63,16 +66,17 @@ server.post("/user/register", async(req, res)=>{
         try{
             const pwd = req.body.password
             const password = await bcrypt.hash(pwd, 11)
-            await User.create({email, password})
+            const user = await User.create({email, password})
             
             const token = jwt.sign({
-                id: User._id,
+                id: user._id,
                 role: "user"
             }, process.env.SECRETJWT)
             res.cookie("token", token, {
                 httpOnly: true,
                 expireIn: "1h"
             })
+            res.set("Authorization", `Bearer ${token}`);
             res.status(201).json({token: token, msg: "User created!"})
         } catch(err){
             res.status(500).json({error: "Error in create user"})
@@ -81,8 +85,12 @@ server.post("/user/register", async(req, res)=>{
     }
 })
 
-server.post("/auth/dashboard", authToken , async (req, res)=>{
-    
+server.get("/auth/dashboard", authToken , async (req, res)=>{
+    const user = await User.findOne({_id: req.user.id.toString()})
+    res.json({
+        email: user.email,
+        role: user.role
+    })
 })
 
 
