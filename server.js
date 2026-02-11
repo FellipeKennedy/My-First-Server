@@ -12,7 +12,9 @@ import cookieParser from "cookie-parser"
 dotenv.config()
 const server = express()
 server.use(express.json())
-server.use(cors())
+server.use(cors({
+  "origin": "http://localhost:5173/"
+}))
 server.use(cookieParser())
 const PORT = process.env.PORT
 const DB_URL = process.env.DB_URL
@@ -80,6 +82,7 @@ server.post("/user/register", async(req, res)=>{
                 id: user._id,
                 email: user.email
             }, process.env.SECRETJWT)
+            
             res.cookie("token", token, {
                 httpOnly: true,
                 expiresin: "1h"

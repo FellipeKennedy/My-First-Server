@@ -1,6 +1,13 @@
 import mongoose from 'mongoose'
 
 const postSchema = new mongoose.Schema({
+  user: {
+    type: String,
+    required: true,
+    trim: true,
+    select: false,
+  },
+
   comment:{
     type: String,
     minlenght: 1,
