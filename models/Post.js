@@ -10,15 +10,15 @@ const postSchema = new mongoose.Schema({
 
   comment:{
     type: String,
-    minlenght: 1,
-    maxlenght: 100,
+    minlength: 1,
+    maxlength: 100,
     required: true,
     trim: false
   },
 
   createdAt: {
     type: Date,
-    default: Date.now()
+    default: Date.now
   }
 })
 
