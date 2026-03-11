@@ -6,7 +6,7 @@ const limiter = rateLimit({
   limit: 30,
   standardHeaders: true,
   statusCode: 429,
-  message: "The limit of requests are over",
+  message: "BLOCKED",
   keyGenerator: (req)=>{
     ipKeyGenerator(req)
   }

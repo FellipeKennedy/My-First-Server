@@ -2,7 +2,8 @@ import mongoose from 'mongoose'
 
 const postSchema = new mongoose.Schema({
   user: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
     required: true,
     trim: true,
     select: false,
@@ -11,15 +12,12 @@ const postSchema = new mongoose.Schema({
   comment:{
     type: String,
     minlength: 1,
-    maxlength: 100,
+    maxlength: 500,
     required: true,
-    trim: false
-  },
-
-  createdAt: {
-    type: Date,
-    default: Date.now
+    trim: true
   }
+}, {
+  timestamps: true
 })
 
 const Post = mongoose.model("Post", postSchema)
