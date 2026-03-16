@@ -3,12 +3,12 @@ import jwt from 'jsonwebtoken'
 import express from 'express'
 import User from '../models/User.js'
 
-
+// Middleware: -- Token authentication --
 export function authToken(req, res, next){
     const token = req.cookies.token
 
     if(!token){
-        res.status(401).json({error: "Token nao encontrado"})
+        res.status(401).json({error: "Token não encontrado"})
         return;
     }
     try{
@@ -26,11 +26,12 @@ export function authToken(req, res, next){
         req.user = usertk
         next()
     } catch (err){
-        return res.status(500).json({msg: "Falha do servidor ao processar identidicação do usuário, por favor tente novamente mais tarde", error: err})
+        return res.status(500).json({msg: "Falha do servidor ao processar identificação do usuário, por favor tente novamente mais tarde", error: err})
     }
 }
 
-export async function authBodySignUp(req, res, next){
+// Middleware: -- BODY verification --
+export async function authBody(req, res, next){
   const {email, password} = req.body
 
   if(!req.body.email){
@@ -53,15 +54,6 @@ export async function authBodySignUp(req, res, next){
     return;
   }
 
-  const userExist = await User.findOne({email: req.body.email})
-  if(userExist){
-    res.status(401).json({error: "User already exists"})
-    return;
-  }
-
   next()
 }
 
-export async function authBodyLogin(req, res, next){
-  
-}

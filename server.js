@@ -6,6 +6,8 @@ import SignUpRoute from './routes/public/SignUp.js'
 import rateLimiter from './middlewares/RateLimit.js'
 import Cors from './middlewares/Cors.js'
 import HealthRoute from './routes/public/Health.js'
+import LoginRoute from './routes/public/Login.js'
+import DeleteRoute from './routes/private/Delete.js'
 
 
 // Configurations
@@ -22,12 +24,13 @@ const PORT = process.env.PORT
 const DB_URL = process.env.DB_URL
 
 // Database Connect
-mongoose.connect(DB_URL).then(()=> console.log("Database Conectado")).catch((err)=> console.log(err))
+mongoose.connect(DB_URL).then(()=> console.log("Database Connected")).catch((err)=> console.log(err))
 
 //   Routes
-server.use("/users", SignUpRoute)
 server.use("/health", HealthRoute)
-
+server.use("/users", SignUpRoute)
+server.use("/", LoginRoute)
+server.use("/users", DeleteRoute)
 
 // Running the server
 server.listen(PORT, ()=>{
