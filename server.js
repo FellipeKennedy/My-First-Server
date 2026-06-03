@@ -7,7 +7,10 @@ import rateLimiter from './middlewares/RateLimit.js'
 import Cors from './middlewares/Cors.js'
 import HealthRoute from './routes/public/Health.js'
 import LoginRoute from './routes/public/Login.js'
-import DeleteRoute from './routes/private/Delete.js'
+import UpdateRoute from './routes/private/UserRoutes/Update.js'
+import DeleteRoute from './routes/private/UserRoutes/Delete.js'
+import CreatePostRoute from './routes/private/PostsRoutes/CreatePost.js'
+import DeletePostRoute from './routes/private/PostsRoutes/DeletePost.js'
 
 
 // Configurations
@@ -24,15 +27,17 @@ const PORT = process.env.PORT
 const DB_URL = process.env.DB_URL
 
 // Database Connect
-mongoose.connect(DB_URL).then(()=> console.log("Database Connected")).catch((err)=> console.log(err))
+mongoose.connect(DB_URL).then(()=>{console.log("Database conected")})
 
-//   Routes
+// Routes
 server.use("/health", HealthRoute)
 server.use("/users", SignUpRoute)
 server.use("/", LoginRoute)
+server.use("/users", UpdateRoute)
 server.use("/users", DeleteRoute)
+server.use("/posts", CreatePostRoute)
 
-// Running the server
+// Running server
 server.listen(PORT, ()=>{
-    console.log("Tudo rodando")
+    console.log("Server running")
 })

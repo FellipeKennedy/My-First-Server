@@ -7,6 +7,12 @@ import jwt from 'jsonwebtoken'
 const router = express.Router()
 
 router.post("/", authBody, async(req, res)=>{
+  const user = await User.findOne({email: req.body.email})
+  if(user){
+    res.status(401).json({err: "User already exist"})
+    return;
+  }
+
   try{
     const email = req.body.email
     const pwd = req.body.password

@@ -3,7 +3,7 @@ import express from 'express'
 
 const limiter = rateLimit({
   windowMs: 60 * 1000,
-  limit: 30,
+  limit: 5,
   standardHeaders: true,
   statusCode: 429,
   message: "BLOCKED",
