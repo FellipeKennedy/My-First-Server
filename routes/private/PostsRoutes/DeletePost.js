@@ -1,26 +1,19 @@
-import express from 'express'
-<<<<<<< HEAD
-
-const router = express.Router()
-
-router.delete("/", (req, res)=>{
-  res.send("Delete Post Route Acessed")
-=======
 import Post from '../../../models/Post.js'
 import { authToken, authDeletePost } from '../../../middlewares/Auth.js'
+import { Router } from 'express'
 
-const router = express.Router()
+const router = Router()
 
 router.delete("/:id", authToken, authDeletePost, async (req, res)=>{
   const postId = req.params.id
-  if(!postId){
-    return res.status(401).send("no post ID found")
-  }
-
-  const post = await Post.findById(postId)
-
-  if(!post){
-    return res.status(401).send("no post found with this is")
+  try{
+    const post = await Post.findById(postId)
+    
+    if(!post){
+      return res.status(401).send("no post found with this is")
+    }
+  } catch (err) {
+    return res.status(400).send("invalid post ID")
   }
 
   try{
@@ -31,7 +24,6 @@ router.delete("/:id", authToken, authDeletePost, async (req, res)=>{
     console.log(err)
     return res.status(500).send("error in deleting post, try again later")
   }
->>>>>>> 79d3f5c (feat: some routes updated and added, but not finalized)
 })
 
 export default router

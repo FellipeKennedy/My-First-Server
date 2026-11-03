@@ -2,17 +2,6 @@ import jwt from 'jsonwebtoken'
 
 // Middleware: -- Token authentication --
 export function authToken(req, res, next){
-<<<<<<< HEAD
-    const authHeader = req.headers["authorization"]
-
-    if(!authHeader){
-      res.status(401).json({error: "Token não encontrado"})
-      return;
-    }
-
-    const authorization =  authHeader.split(" ")
-    const token = req.cookies.token || authorization[1]
-=======
     const token =
       req.cookies?.token ||
       req.headers.authorization?.split(" ")[1];
@@ -24,7 +13,6 @@ export function authToken(req, res, next){
 
     //const authorization =  authHeader.split(" ")
     //const token = req.cookies?.token || authorization[1]
->>>>>>> 79d3f5c (feat: some routes updated and added, but not finalized)
 
     if(!token){
         res.status(401).json({error: "Token não encontrado"})
@@ -58,11 +46,7 @@ export function authBody(req, res, next){
     return res.status(401).json({err: "invalid request"})
   }
 
-<<<<<<< HEAD
-  if(!req.body.email){
-=======
   if(!email){
->>>>>>> 79d3f5c (feat: some routes updated and added, but not finalized)
     res.status(401).json({error: "email is required!"})
     return;
   }
@@ -113,13 +97,7 @@ export function authUpdatePut(req, res, next){
   res.send(optionsToUpdate) 
 }
 
-
-
-<<<<<<< HEAD
-export function authPost(req, res, next){
-=======
 export function authCreatePost(req, res, next){
->>>>>>> 79d3f5c (feat: some routes updated and added, but not finalized)
   const { user, comment } = req.body
 
   if(!user || !comment){
@@ -128,8 +106,6 @@ export function authCreatePost(req, res, next){
 
   next()
 }
-<<<<<<< HEAD
-=======
 
 export function authDeletePost(req, res, next){
   const postId = req.params.id
@@ -139,4 +115,3 @@ export function authDeletePost(req, res, next){
 
   next()
 }
->>>>>>> 79d3f5c (feat: some routes updated and added, but not finalized)
