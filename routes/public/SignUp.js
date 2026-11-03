@@ -1,7 +1,7 @@
 import express from 'express'
 import { authBody } from '../../middlewares/Auth.js'
 import User from '../../models/User.js'
-import bcrypt from 'bcrypt'
+import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 
 const router = express.Router()
@@ -22,7 +22,7 @@ router.post("/", authBody, async(req, res)=>{
     const token = jwt.sign({
       id: user._id,
       email: user.email
-      }, process.env.SECRETJWT)
+      }, process.env.SECRETJWT, {expiresin: "1h"})
 
       res.status(201).cookie("token", token, {
         httpOnly: true,
@@ -30,8 +30,8 @@ router.post("/", authBody, async(req, res)=>{
       })
       return res.json({token: token, msg: "User created"})
     } catch(err){
-      return res.status(500).json({error: "Error in create user, please try again later"})
       console.log(err)
+      return res.status(500).json({error: "Error in create user, please try again later"})
     }
 })
 

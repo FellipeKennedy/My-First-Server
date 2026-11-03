@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import dotenv from 'dotenv'
 import mongoose from 'mongoose'
 import express from 'express'
@@ -11,8 +12,15 @@ import UpdateRoute from './routes/private/UserRoutes/Update.js'
 import DeleteRoute from './routes/private/UserRoutes/Delete.js'
 import CreatePostRoute from './routes/private/PostsRoutes/CreatePost.js'
 import DeletePostRoute from './routes/private/PostsRoutes/DeletePost.js'
+=======
+import { createServer } from 'node:https'
+import { readFileSync } from 'node:fs'
+import app from './app.js'
+>>>>>>> 79d3f5c (feat: some routes updated and added, but not finalized)
 
+const server = createServer({key: readFileSync("./private.key"), cert: readFileSync("./certificate.crt")}, app)
 
+<<<<<<< HEAD
 // Configurations
 dotenv.config()
 const server = express()
@@ -40,4 +48,9 @@ server.use("/posts", CreatePostRoute)
 // Running server
 server.listen(PORT, ()=>{
     console.log("Server running")
+=======
+server.listen(3443, ()=>{
+  console.log("running HTTPS at 3443")
+>>>>>>> 79d3f5c (feat: some routes updated and added, but not finalized)
 })
+
